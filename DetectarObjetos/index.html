@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DetectaObjetos - IA para Clasificación de Imágenes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🔍</span>
+                    <h1 class="logo-text">DetectaObjetos</h1>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="upload-container">
+                    <h2 class="section-title">Analiza tu Imagen</h2>
+                    <p class="section-subtitle">Sube una foto para identificar objetos cotidianos con IA</p>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                        <div class="upload-content">
+                            <div class="upload-icon">📸</div>
+                            <h3>Arrastra tu imagen aquí</h3>
+                            <p>o haz clic para seleccionar</p>
+                            <button class="upload-btn" id="uploadBtn">Seleccionar Imagen</button>
+                        </div>
+                        <div class="preview-container" id="previewContainer" style="display: none;">
+                            <img id="previewImage" alt="Vista previa">
+                            <button class="remove-btn" id="removeBtn">✕</button>
+                        </div>
+                    </div>
+                    
+                    <button class="analyze-btn" id="analyzeBtn" disabled>
+                        <span class="btn-text">Analizar Imagen</span>
+                        <span class="btn-loader" style="display: none;">⏳</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <h2 class="section-title">Resultados del Análisis</h2>
+                    <div class="results-stats">
+                        <span class="stat-item">
+                            <span class="stat-number" id="objectCount">0</span>
+                            <span class="stat-label">objetos detectados</span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Cards Grid -->
+                <div class="cards-container" id="cardsContainer">
+                    <!-- Cards will be dynamically added here -->
+                </div>
+
+                <!-- Table Section -->
+                <div class="table-container">
+                    <h3 class="table-title">Historial de Detecciones</h3>
+                    <div class="table-wrapper">
+                        <table class="results-table" id="resultsTable">
+                            <thead>
+                                <tr>
+                                    <th>Imagen</th>
+                                    <th>Objeto</th>
+                                    <th>Categoría</th>
+                                    <th>Descripción</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <!-- Table rows will be dynamically added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Empty State -->
+            <section class="empty-state" id="emptyState">
+                <div class="empty-content">
+                    <div class="empty-icon">🏠</div>
+                    <h3>Comienza a detectar objetos</h3>
+                    <p>Sube una imagen de cualquier objeto que encuentres en tu casa y nuestra IA lo identificará</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>Desarrollado con ❤️ usando Google Gemini AI</p>
+                <p class="footer-note">Detecta objetos cotidianos con inteligencia artificial</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-message" id="toastMessage"></span>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Editar Objeto</h3>
+                <button class="modal-close" id="modalClose">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <div class="form-group">
+                        <label for="editName">Nombre del Objeto</label>
+                        <input type="text" id="editName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editCategory">Categoría</label>
+                        <select id="editCategory" required>
+                            <option value="">Selecciona una categoría</option>
+                            <option value="electrodoméstico">Electrodoméstico</option>
+                            <option value="mueble">Mueble</option>
+                            <option value="utensilio">Utensilio</option>
+                            <option value="decoración">Decoración</option>
+                            <option value="electrónica">Electrónica</option>
+                            <option value="cocina">Cocina</option>
+                            <option value="limpieza">Limpieza</option>
+                            <option value="ropa">Ropa</option>
+                            <option value="libro">Libro</option>
+                            <option value="juguete">Juguete</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDescription">Descripción</label>
+                        <textarea id="editDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDate">Fecha y Hora</label>
+                        <input type="text" id="editDate" readonly>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" id="modalCancel">Cancelar</button>
+                <button type="submit" class="btn-primary" id="modalSave">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal modal-small">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirmar Eliminación</h3>
+                <button class="modal-close" id="deleteModalClose">✕</button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que quieres eliminar este objeto?</p>
+                <p class="delete-warning">Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" id="deleteCancel">Cancelar</button>
+                <button type="button" class="btn-danger" id="deleteConfirm">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

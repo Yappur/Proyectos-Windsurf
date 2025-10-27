@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriAI - Análisis Inteligente de Comidas</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-leaf"></i>
+                    <span>NutriAI</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section" id="uploadSection">
+                <div class="upload-container">
+                    <div class="upload-header">
+                        <h1>Análisis Nutricional Inteligente</h1>
+                        <p>Sube una foto de tu comida y recibe un análisis completo por nuestra IA nutricionista</p>
+                    </div>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-content">
+                            <div class="upload-icon">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                            <h3>Arrastra tu foto aquí</h3>
+                            <p>o haz clic para seleccionar</p>
+                            <input type="file" id="fileInput" accept="image/*" hidden>
+                            <button class="upload-btn" id="uploadBtn">
+                                <i class="fas fa-upload"></i>
+                                Seleccionar Imagen
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="preview-container" id="previewContainer" style="display: none;">
+                        <div class="preview-image">
+                            <img id="previewImg" src="" alt="Vista previa">
+                        </div>
+                        <div class="preview-actions">
+                            <button class="btn btn-secondary" id="changeImageBtn">
+                                <i class="fas fa-redo"></i>
+                                Cambiar Imagen
+                            </button>
+                            <button class="btn btn-primary" id="analyzeBtn">
+                                <i class="fas fa-brain"></i>
+                                Analizar Comida
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loading Section -->
+            <section class="loading-section" id="loadingSection" style="display: none;">
+                <div class="loading-container">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                    </div>
+                    <h2>Analizando tu comida...</h2>
+                    <p>Nuestra IA está examinando los ingredientes y valores nutricionales</p>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <h2>Resultados del Análisis</h2>
+                    <button class="btn btn-secondary" id="newAnalysisBtn">
+                        <i class="fas fa-plus"></i>
+                        Nuevo Análisis
+                    </button>
+                </div>
+
+                <div class="results-grid">
+                    <!-- General Info Card -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <i class="fas fa-info-circle"></i>
+                            <h3>Información General</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="info-item">
+                                <span class="label">Plato Detectado:</span>
+                                <span class="value" id="dishName">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Tipo de Cocina:</span>
+                                <span class="value" id="cuisineType">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Categoría:</span>
+                                <span class="value" id="mealCategory">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ingredients Card -->
+                    <div class="card card-secondary">
+                        <div class="card-header">
+                            <i class="fas fa-carrot"></i>
+                            <h3>Ingredientes Detectados</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="ingredients-list" id="ingredientsList">
+                                <!-- Ingredients will be added dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nutritional Info Card -->
+                    <div class="card card-accent">
+                        <div class="card-header">
+                            <i class="fas fa-chart-pie"></i>
+                            <h3>Información Nutricional</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="nutrition-grid">
+                                <div class="nutrition-item">
+                                    <div class="nutrition-icon">
+                                        <i class="fas fa-fire"></i>
+                                    </div>
+                                    <div class="nutrition-info">
+                                        <span class="nutrition-value" id="calories">-</span>
+                                        <span class="nutrition-label">Calorías</span>
+                                    </div>
+                                </div>
+                                <div class="nutrition-item">
+                                    <div class="nutrition-icon">
+                                        <i class="fas fa-drumstick-bite"></i>
+                                    </div>
+                                    <div class="nutrition-info">
+                                        <span class="nutrition-value" id="protein">-</span>
+                                        <span class="nutrition-label">Proteínas</span>
+                                    </div>
+                                </div>
+                                <div class="nutrition-item">
+                                    <div class="nutrition-icon">
+                                        <i class="fas fa-bread-slice"></i>
+                                    </div>
+                                    <div class="nutrition-info">
+                                        <span class="nutrition-value" id="carbs">-</span>
+                                        <span class="nutrition-label">Carbohidratos</span>
+                                    </div>
+                                </div>
+                                <div class="nutrition-item">
+                                    <div class="nutrition-icon">
+                                        <i class="fas fa-oil-can"></i>
+                                    </div>
+                                    <div class="nutrition-info">
+                                        <span class="nutrition-value" id="fats">-</span>
+                                        <span class="nutrition-label">Grasas</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Health Insights Card -->
+                    <div class="card card-success">
+                        <div class="card-header">
+                            <i class="fas fa-heart"></i>
+                            <h3>Insights de Salud</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="insights-list" id="healthInsights">
+                                <!-- Insights will be added dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Diet Recommendations Card -->
+                    <div class="card card-warning">
+                        <div class="card-header">
+                            <i class="fas fa-user-md"></i>
+                            <h3>Recomendaciones Dietéticas</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="recommendations-list" id="dietRecommendations">
+                                <!-- Recommendations will be added dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Allergens & Warnings Card -->
+                    <div class="card card-danger">
+                        <div class="card-header">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <h3>Alérgenos y Advertencias</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="warnings-list" id="allergensWarnings">
+                                <!-- Warnings will be added dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2024 NutriAI - Análisis Nutricional con IA</p>
+                <p>Desarrollado con Gemini 2.5</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
