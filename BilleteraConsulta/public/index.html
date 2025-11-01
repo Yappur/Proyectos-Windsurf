@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BilleteraConsulta - Asesor Financiero IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>💳 BilleteraConsulta</h1>
+                    <p>Tu asesor financiero con IA</p>
+                </div>
+                <div class="header-actions">
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
+                        🌙
+                    </button>
+                    <button class="historial-btn" onclick="toggleHistorial()">
+                        📊 Historial
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Panel de Consulta -->
+            <section class="consulta-panel">
+                <div class="consulta-header">
+                    <h2>Realiza tu consulta financiera</h2>
+                    <p>Ej: "¿Cuál es la billetera con mejor rendimiento en Argentina?"</p>
+                </div>
+                
+                <div class="input-container">
+                    <textarea 
+                        id="preguntaInput" 
+                        placeholder="Escribe tu pregunta aquí..."
+                        rows="3"
+                    ></textarea>
+                    <button id="consultarBtn" onclick="realizarConsulta()">
+                        🚀 Consultar
+                    </button>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loadingState" class="loading-state hidden">
+                    <div class="spinner"></div>
+                    <p>Analizando tu consulta...</p>
+                </div>
+            </section>
+
+            <!-- Panel de Resultados -->
+            <section id="resultadosPanel" class="resultados-panel hidden">
+                <div class="resultados-header">
+                    <h3>📈 Resultados del Análisis</h3>
+                    <button class="close-btn" onclick="cerrarResultados()">✕</button>
+                </div>
+
+                <!-- Respuesta Principal -->
+                <div class="respuesta-principal">
+                    <h4>Respuesta Principal</h4>
+                    <p id="respuestaPrincipal"></p>
+                </div>
+
+                <!-- Dashboard Grid -->
+                <div class="dashboard-grid">
+                    <!-- Recomendaciones -->
+                    <div class="card recomendaciones-card">
+                        <h4>🎯 Recomendaciones</h4>
+                        <div id="recomendacionesContainer"></div>
+                    </div>
+
+                    <!-- Gráfico -->
+                    <div class="card grafico-card">
+                        <h4>📊 Visualización</h4>
+                        <div class="chart-container">
+                            <canvas id="datosChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Consejos -->
+                    <div class="card consejos-card">
+                        <h4>💡 Consejos Importantes</h4>
+                        <ul id="consejosContainer"></ul>
+                    </div>
+
+                    <!-- Estadísticas -->
+                    <div class="card estadisticas-card">
+                        <h4>📋 Estadísticas Rápidas</h4>
+                        <div id="estadisticasContainer"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel de Historial -->
+            <aside id="historialPanel" class="historial-panel hidden">
+                <div class="historial-header">
+                    <h3>📚 Historial de Consultas</h3>
+                    <button class="close-btn" onclick="toggleHistorial()">✕</button>
+                </div>
+                <div class="historial-content">
+                    <button class="limpiar-historial-btn" onclick="limpiarHistorial()">
+                        🗑️ Limpiar historial
+                    </button>
+                    <div id="historialContainer"></div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2024 BilleteraConsulta - Desarrollado con ❤️ y Gemini AI</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
